@@ -29,13 +29,12 @@ lib/
 │      ├── shift_card.dart
 │      └── dropdown_row.dart
 └── firebase_options.dart
-
 */
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
-//import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart'; // הוסף שורה זו
 import 'app/views/home.dart';
 import 'app/views/login.dart';
@@ -74,18 +73,3 @@ void main() async {
     ),
   );
 }
-
-
-//await initializeDateFormatting('he', ''); // אתחול התמיכה בעברית
-  //await initializeDateFormatting();
-  ////supportedLocales: const [
-      //  Locale('he'),                      // עברית
-      //  Locale('en'),                      // אנגלית (למקרה חירום)
-      //],
-      //localizationsDelegates: [
-      //  GlobalMaterialLocalizations.delegate,
-      //  GlobalWidgetsLocalizations.delegate,
-       // GlobalCupertinoLocalizations.delegate,
-      //],
-
-
