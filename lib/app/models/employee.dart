@@ -1,19 +1,22 @@
 class Employee {
+  final int id;
   final String name;
   final String duty;
   final String email;
   final String phone;
 
   Employee({
+    required this.id,
     required this.name,
     required this.duty,
     required this.email,
     required this.phone,
   });
 
-  factory Employee.fromJson(String name, Map<String, dynamic> json) {
+  factory Employee.fromJson(int id, Map<String, dynamic> json) {
     return Employee(
-      name: name,
+      id: id,
+      name: json['name'],
       duty: json['duty'],
       email: json['email'],
       phone: json['phone'],
@@ -22,6 +25,7 @@ class Employee {
 
   Map<String, dynamic> toJson() {
     return {
+      'name': name,
       'duty': duty,
       'email': email,
       'phone': phone,

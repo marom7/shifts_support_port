@@ -18,7 +18,7 @@ class EmployeeController extends GetxController {
       final data = snapshot.value as Map<dynamic, dynamic>;
       final parsed = data.entries.map((entry) {
         return Employee.fromJson(
-            entry.key.toString(), Map<String, dynamic>.from(entry.value));
+            entry.key, Map<String, dynamic>.from(entry.value));
       }).toList();
 
       employees.assignAll(parsed);
