@@ -2143,56 +2143,65 @@
       "it2": ""
     }
   },
-  "employyes": {
-    "1": {
+  "holidays": {
+    "1": "ראש השנה",
+    "2": "יום כיפור",
+    "3": "סוכות",
+    "4": "שמחת תורה",
+    "5": "יום הזיכרון לחללי צה\"ל",
+    "6": "יום העצמאות",
+    "7": "שבועות"
+  },
+  "employees": {
+    "01": {
       "name": "גיא קוגן",
       "duty": "טכנאי",
       "email": "GUYK@ashdodport.co.il",
       "phone": "050-7833828"
     },
-    "2": {
+    "02": {
       "name": "דב לובין",
       "duty": "טכנאי",
       "email": "DOVL@ashdodport.co.il",
       "phone": "054-4469655"
     },
-    "3": {
+    "03": {
       "name": "טל מרדר",
       "duty": "מנהל רשת",
       "email": "TALM@ashdodport.co.il",
       "phone": "050-5590207"
     },
-    "4": {
+    "04": {
       "name": "יבגני בלאכמן",
       "duty": "מנהל רשת",
       "email": "IVGENYB@ashdodport.co.il",
       "phone": "054-8090255"
     },
-    "5": {
+    "05": {
       "name": "יוסי הרשקו",
       "duty": "סייבר",
       "email": "YOSSIH@ashdodport.co.il",
       "phone": "052-6602040"
     },
-    "6": {
+    "06": {
       "name": "יוסי כלפון",
       "duty": "סייבר",
       "email": "YOSSIK@ashdodport.co.il",
       "phone": "054-8067943"
     },
-    "7": {
+    "07": {
       "name": "ליאור אברהם",
       "duty": "מנהל רשת",
       "email": "LIORA@ashdodport.co.il",
       "phone": "050-77793043"
     },
-    "8": {
+    "08": {
       "name": "מארק צ'רניאקוב",
       "duty": "טכנאי",
       "email": "MARKC@ashdodport.co.il",
       "phone": "054-2289464"
     },
-    "9": {
+    "09": {
       "name": "מקסים גרביץ",
       "duty": "מנהל רשת",
       "email": "MAXIMG@ashdodport.co.il",
