@@ -24,7 +24,7 @@ class EmployeeController extends GetxController {
         return Employee.fromJson(
             entry.key, Map<String, dynamic>.from(entry.value));
       }).toList();
-
+      parsed.sort((a, b) => a.duty.compareTo(b.duty));
       employees.assignAll(parsed);
     }
     else {

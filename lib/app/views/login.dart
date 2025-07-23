@@ -48,6 +48,7 @@ class LoginScreen extends StatelessWidget {
                             TextField(
                               controller: controller.phoneController,
                               textAlign: TextAlign.right, // יישור לימין
+                              keyboardType: TextInputType.phone,
                               decoration: const InputDecoration(
                                 labelText: 'נייד',
                                 prefixIcon: Icon(Icons.phone),
@@ -58,6 +59,7 @@ class LoginScreen extends StatelessWidget {
                               controller: controller.passwordController,
                               obscureText: true,
                               textAlign: TextAlign.right, // יישור לימין
+                              keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
                                 labelText: 'סיסמא',
                                 prefixIcon: Icon(Icons.lock),

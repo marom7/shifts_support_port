@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/employee.dart';
@@ -5,14 +7,14 @@ import 'employee_detail.dart';
 
 class EmployeeGridPage extends StatelessWidget {
   final EmployeeController controller = Get.put(EmployeeController());
-
+  
   EmployeeGridPage({super.key});
 
   Color getRoleColor(String role) {
      if (role == 'מנהל רשת') return Colors.blue.shade100;
-     if (role == 'טכנאי') Colors.green.shade100;
+     if (role == 'טכנאי') return Colors.green.shade100;
      if (role == 'סייבר') return const Color.fromARGB(255, 255, 190, 178);
-     if (role == 'מפעיל מחשב') return const Color.fromARGB(255, 191, 216, 236);
+     if (role == 'מפעיל מחשב') return const Color.fromARGB(255, 161, 161, 228);
      return Colors.grey.shade200; // צבע ברירת מחדל
   }
 
@@ -21,9 +23,9 @@ class EmployeeGridPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('רשימת עובדים')),
       body: Obx(() {
-        if (controller.employees.isEmpty) {
+        if (controller.employees.isEmpty) 
           return const Center(child: CircularProgressIndicator());
-        }
+        
         return GridView.builder(
           padding: const EdgeInsets.all(8),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
