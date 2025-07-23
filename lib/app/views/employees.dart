@@ -9,9 +9,11 @@ class EmployeeGridPage extends StatelessWidget {
   EmployeeGridPage({super.key});
 
   Color getRoleColor(String role) {
-    return role == 'Network Manager'
-        ? Colors.blue.shade100
-        : Colors.green.shade100;
+     if (role == 'מנהל רשת') return Colors.blue.shade100;
+     if (role == 'טכנאי') Colors.green.shade100;
+     if (role == 'סייבר') return const Color.fromARGB(255, 255, 190, 178);
+     if (role == 'מפעיל מחשב') return const Color.fromARGB(255, 191, 216, 236);
+     return Colors.grey.shade200; // צבע ברירת מחדל
   }
 
   @override
