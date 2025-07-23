@@ -32,10 +32,10 @@ class ShiftPage extends StatelessWidget {
                     children: [
                       buildShiftCard('משמרת בוקר', shift.hd1, shift.it1, (v) {
                         shift.hd1 = v; // טכנאי בוקר
-                        controller.updateShift(dateKey, shift);
+                        //controller.updateShift(dateKey, shift);
                       }, (v) {
                         shift.it1 = v; // מנהל רשת בוקר
-                        controller.updateShift(dateKey, shift);
+                        //controller.updateShift(dateKey, shift);
                       }),
                       const SizedBox(height: 16),
                       buildShiftCard('משמרת ערב', shift.hd2, shift.it2, (v) {

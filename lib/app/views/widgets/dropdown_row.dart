@@ -11,7 +11,7 @@ Widget buildDropdown(
         .toList(),
     onChanged: (val) => onChanged(val ?? ''),
     decoration: InputDecoration(
-      labelText: items.contains('מרום') ? 'טכנאי' : 'מנהל רשת',
+      labelText: items.contains('מרום מילנר') ? 'טכנאי' : 'מנהל רשת',
       border: const OutlineInputBorder(),
       isDense: true,
     ),

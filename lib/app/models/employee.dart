@@ -1,5 +1,5 @@
 class Employee {
-  final int id;
+  final String id;
   final String name;
   final String duty;
   final String email;
@@ -13,7 +13,7 @@ class Employee {
     required this.phone,
   });
 
-  factory Employee.fromJson(int id, Map<String, dynamic> json) {
+  factory Employee.fromJson(String id, Map<String, dynamic> json) {
     return Employee(
       id: id,
       name: json['name'],

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:get/get.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../models/employee.dart';
@@ -25,31 +27,16 @@ class EmployeeController extends GetxController {
 
       employees.assignAll(parsed);
     }
-       /*final snapshot = await _dbRef.get();
-     
-    if (snapshot.exists) {
-      final raw = snapshot.value;
-      if (raw is Map) {
-        final data = Map<String, dynamic>.from(raw);
-        final parsed = data.entries.map((entry) {
-          return Employee.fromJson(entry.key, Map<String, dynamic>.from(entry.value));
-        }).toList();
-
-        employees.assignAll(parsed);
-      } else {
-        // ignore: avoid_print
-        print('Error: snapshot.value is not Map but ${raw.runtimeType}');
-      }
-    }*/
+    else {
+      print('No data available');
+    }
   }
   
-  
-
   Employee? getEmployeeByName(String name) {
     return employees.firstWhereOrNull((e) => e.name == name);
   }
 
-  List<Employee> getEmployeesByDuty(String duty) {
-    return employees.where((e) => e.duty == duty).toList();
+  List<Employee> getEmployeesByDuty(List<String> duties) {
+    return employees.where((e) => duties.contains(e.duty)).toList();
   }
 }
