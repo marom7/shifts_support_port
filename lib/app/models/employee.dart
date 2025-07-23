@@ -1,9 +1,9 @@
 class Employee {
-   String? id;
-   String name;
-   String duty;
-   String email;
-   String phone;
+  final String id;
+  final String name;
+  final String duty;
+  final String email;
+  final String phone;
 
   Employee({
     required this.id,
@@ -13,9 +13,9 @@ class Employee {
     required this.phone,
   });
 
-  factory Employee.fromJson(Map<String, dynamic> json, {String? key}) {
+  factory Employee.fromJson(String id, Map<String, dynamic> json) {
     return Employee(
-      id: key,
+      id: id,
       name: json['name'],
       duty: json['duty'],
       email: json['email'],
