@@ -21,7 +21,7 @@ class ShiftPage extends StatelessWidget {
             Expanded(
               child: Obx(() {
                 final dateKey = DateFormat('dd-MM-yy').format(controller.selectedMonth.value);
-                final shift = controller.shifts[dateKey];
+                final shift = controller.allShifts[dateKey];
 
                 if (shift == null) {
                   return const Center(child: Text("אין נתונים ליום זה", style: TextStyle(color: Colors.white)));
