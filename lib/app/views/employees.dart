@@ -17,7 +17,7 @@ class EmployeeGridPage extends StatelessWidget {
      if (role == 'מפעיל מחשב') return const Color.fromARGB(255, 161, 161, 228);
      return Colors.grey.shade200; // צבע ברירת מחדל
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +68,7 @@ class EmployeeGridPage extends StatelessWidget {
     );
   }
 }
-
+ 
 /*
 import 'package:flutter/material.dart';
 

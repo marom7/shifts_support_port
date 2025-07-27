@@ -5,5 +5,6 @@ class HomeController extends GetxController {
 
   void changeTab(int index) {
     currentIndex.value = index;
+    
   }
 }

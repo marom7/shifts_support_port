@@ -45,11 +45,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform, // הוסף שורה זו
   );
-
+  Get.put(RouteObserver<PageRoute>(), permanent: true);
   runApp(
     GetMaterialApp(
       locale: const Locale('he'), // עברית
       initialRoute: '/login',
+      navigatorObservers: [Get.find<RouteObserver<PageRoute>>()],
       getPages: [
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/home', page: () => const HomeScreen()),
@@ -72,4 +73,6 @@ void main() async {
       ),
     ),
   );
+
+  
 }

@@ -4,9 +4,10 @@ import 'package:intl/intl.dart';
 import '/app/views/widgets/build_shift_card.dart';
 import '/app/controllers/shift.dart';
 import 'widgets/build_day_capsules.dart' as day_capsules;
+import 'widgets/day_capsules.dart' as days_capsules; // Importing the DayCapsules widget by DeepSeek
 
 class ShiftPage extends StatelessWidget {
-  final ShiftsController controller = Get.put(ShiftsController());
+  final ShiftsController _controller = Get.put(ShiftsController());
 
  ShiftPage({super.key});
 
@@ -17,11 +18,11 @@ class ShiftPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            day_capsules.buildDayCapsules(controller),
+            days_capsules.DayCapsules(controller: _controller,),
             Expanded(
               child: Obx(() {
-                final dateKey = DateFormat('dd-MM-yy').format(controller.selectedMonth.value);
-                final shift = controller.shifts[dateKey];
+                final dateKey = DateFormat('dd-MM-yy').format(_controller.selectedMonth.value);
+                final shift = _controller.shifts[dateKey];
 
                 if (shift == null) {
                   return const Center(child: Text("אין נתונים ליום זה", style: TextStyle(color: Colors.white)));
@@ -56,10 +57,10 @@ class ShiftPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
                 onPressed: () {
-                  final dateKey = DateFormat('dd-MM-yy').format(controller.selectedMonth.value);
-                  final shift = controller.shifts[dateKey];
+                  final dateKey = DateFormat('dd-MM-yy').format(_controller.selectedMonth.value);
+                  final shift = _controller.shifts[dateKey];
                   if (shift != null) {
-                    controller.updateShift(dateKey, shift);
+                    _controller.updateShift(dateKey, shift);
                     Get.snackbar("הצלחה", "המשמרת עודכנה ליום $dateKey");
                   }
                 },
