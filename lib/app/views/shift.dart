@@ -4,12 +4,11 @@ import 'package:intl/intl.dart';
 import '/app/views/widgets/build_shift_card.dart';
 import '/app/controllers/shift.dart';
 import 'widgets/build_day_capsules.dart' as day_capsules;
-import 'widgets/day_capsules.dart' as days_capsules; // Importing the DayCapsules widget by DeepSeek
+//import 'widgets/day_capsules.dart' as day_capsules; // Importing the DayCapsules widget by DeepSeek
 
 class ShiftPage extends StatelessWidget {
   final ShiftsController _controller = Get.put(ShiftsController());
-
- ShiftPage({super.key});
+  ShiftPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,7 @@ class ShiftPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            days_capsules.DayCapsules(controller: _controller,),
+            day_capsules.buildDayCapsules(_controller),
             Expanded(
               child: Obx(() {
                 final dateKey = DateFormat('dd-MM-yy').format(_controller.selectedMonth.value);

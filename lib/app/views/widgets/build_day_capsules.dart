@@ -6,7 +6,7 @@ import '/app/controllers/shift.dart'; // Adjust the import based on your project
 Widget buildDayCapsules(ShiftsController controller) {
   final now = DateTime.now();
   final daysInMonth = DateUtils.getDaysInMonth(now.year, now.month);
-
+  //ScrollController scrollController = ScrollController();
   String getHebrewDayLetter(DateTime date) {
     const days = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'שבת'];
     // Flutter: יום ראשון = 7, יום שני = 1 ... יום שבת = 6
@@ -15,13 +15,15 @@ Widget buildDayCapsules(ShiftsController controller) {
     int index = date.weekday % 7; // ראשון=0, שני=1, ..., שבת=6
     return days[index];
   }
-
+  double oldPosition =0; // משתנה לאיפוס מיקום הגלילה
+  
   return Obx(() {
     final selectedDay =
         controller.selectedMonth.value.day; // שימוש ישיר ב-observable
     return SizedBox(
       height: 70,
       child: ListView.builder(
+        controller: controller.scrollController,
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 8),
         itemCount: daysInMonth,
@@ -31,7 +33,13 @@ Widget buildDayCapsules(ShiftsController controller) {
           final isSelected = selectedDay == day;
 
           return GestureDetector(
-            onTap: () => controller.selectedMonth.value = date,
+            onTap:  () { 
+              controller.selectedMonth.value = date; // עדכון התאריך הנבחר  
+              oldPosition = controller.scrollController.position.pixels; //  מיקום הגלילה
+              //controller.scrollPosition = scrollController.position.pixels;
+              //scrollController.jumpTo(controller.scrollPosition);
+              //controller.selectedMonth.value = DateTime(now.year, now.month, day);  
+            },  
             child: Container(
               width: 60,
               margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -60,4 +68,7 @@ Widget buildDayCapsules(ShiftsController controller) {
       ),
     );
   });
+
 }
+
+

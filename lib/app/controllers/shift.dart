@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +12,8 @@ class ShiftsController extends GetxController {
 
   /// תאריך החודש הנבחר
   var selectedMonth = DateTime.now().obs;
+  ScrollController scrollController = ScrollController();
+  static double scrollPosition = 0; 
 
   @override
   void onInit() {
@@ -80,5 +83,38 @@ class ShiftsController extends GetxController {
     } catch (e) {
       Get.snackbar("שגיאה", "עדכון נכשל: $e");
     }
+  }
+
+  //////////////////////////////////////////////
+  ///      גלילה של רשימת הימים      /////////
+  /////////////////////////////////////////////
+  // גלילה למיקום ספציפי (בפיקסלים)
+  void scrollToPosition(double offset) {
+    scrollController.animateTo(
+      offset,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  // גלילה לתחילת הרשימה
+  void scrollToStart() {
+    scrollController.jumpTo(0); // מיידי
+    // או: _scrollController.animateTo(0, ...)
+  }
+
+  // גלילה לסוף הרשימה
+  void scrollToEnd() {
+    scrollController.jumpTo(scrollController.position.maxScrollExtent);
+  }
+
+  // גלילה לפריט ספציפי (אם כל הפריטים באותו רוחב)
+  void scrollToIndex(int index) {
+    const itemWidth = 116; // רוחב פריט + מרווחים
+      scrollController.animateTo(
+      index.toDouble() * itemWidth,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeInOut,
+    );
   }
 }
