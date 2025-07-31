@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shifts_employees/app/views/shift.dart';
 import 'firebase_options.dart'; // הוסף שורה זו
 import 'app/views/home.dart';
 import 'app/views/login.dart';
@@ -54,6 +55,7 @@ void main() async {
       getPages: [
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/home', page: () => const HomeScreen()),
+        GetPage(name: '/shifts', page: () => ShiftPage()),
       ],
       theme: ThemeData.light().copyWith(
         primaryColor: const Color(0xFF00ACC1), // תכלת

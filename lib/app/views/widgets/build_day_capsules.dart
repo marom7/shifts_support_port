@@ -15,11 +15,44 @@ Widget buildDayCapsules(ShiftsController controller) {
     int index = date.weekday % 7; // ראשון=0, שני=1, ..., שבת=6
     return days[index];
   }
-  double oldPosition =0; // משתנה לאיפוס מיקום הגלילה
-  
+  //double oldPosition =0; // משתנה לאיפוס מיקום הגלילה
+  ///////////////////////////////////////
+  ///      גלילה של רשימת הימים      //
+  ///////////////////////////////////////
+  // גלילה למיקום ספציפי (בפיקסלים)
+  void scrollToPosition(double offset) {
+    controller.scrollController.animateTo(
+      offset,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  // גלילה לתחילת הרשימה
+  void scrollToStart() {
+    controller.scrollController.jumpTo(0); // מיידי
+    // או: _scrollController.animateTo(0, ...)
+  }
+
+  // גלילה לסוף הרשימה
+  void scrollToEnd() {
+    controller.scrollController.jumpTo(controller.scrollController.position.maxScrollExtent);
+  }
+
+  // גלילה לפריט ספציפי (אם כל הפריטים באותו רוחב)
+  void scrollToIndex(int index) {
+    const itemWidth = 116; // רוחב פריט + מרווחים
+      controller.scrollController.animateTo(
+      index.toDouble() * itemWidth,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeInOut,
+    );
+  }
+
   return Obx(() {
     final selectedDay =
         controller.selectedMonth.value.day; // שימוש ישיר ב-observable
+    
     return SizedBox(
       height: 70,
       child: ListView.builder(
@@ -31,11 +64,21 @@ Widget buildDayCapsules(ShiftsController controller) {
           final day = index + 1;
           final date = DateTime(now.year, now.month, day);
           final isSelected = selectedDay == day;
-
+          try {
+            // אם יש גלילה קודמת, גלול למיקום הקודם
+            if (controller.scrollPosition != 0) {
+              scrollToIndex(5); // גלילה למיקום הקודם
+              //controller.scrollController.jumpTo(controller.scrollPosition);
+            }
+          } catch (e) {
+            // טיפול בשגיאה אם הגלילה לא מצליחה
+            print("גלילה נכשלה: $e");
+          }
+          
           return GestureDetector(
             onTap:  () { 
               controller.selectedMonth.value = date; // עדכון התאריך הנבחר  
-              oldPosition = controller.scrollController.position.pixels; //  מיקום הגלילה
+              controller.scrollPosition = controller.scrollController.position.pixels; //  מיקום הגלילה
               //controller.scrollPosition = scrollController.position.pixels;
               //scrollController.jumpTo(controller.scrollPosition);
               //controller.selectedMonth.value = DateTime(now.year, now.month, day);  

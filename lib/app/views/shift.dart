@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '/app/views/widgets/build_shift_card.dart';
 import '/app/controllers/shift.dart';
-import 'widgets/build_day_capsules.dart' as day_capsules;
-//import 'widgets/day_capsules.dart' as day_capsules; // Importing the DayCapsules widget by DeepSeek
+//import 'widgets/build_day_capsules.dart' as day_capsules;
+import 'widgets/day_capsules.dart' as day_capsules; // Importing the DayCapsules widget by DeepSeek
 
 class ShiftPage extends StatelessWidget {
   final ShiftsController _controller = Get.put(ShiftsController());
@@ -17,12 +17,15 @@ class ShiftPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            day_capsules.buildDayCapsules(_controller),
+            day_capsules.DayCapsules(controller: _controller,), // Using the DayCapsules widget
             Expanded(
               child: Obx(() {
+                if (_controller.shifts.isEmpty) {
+                  return const Center(child: Text("הנתונים עדיין נטענים...", style: TextStyle(color: Colors.white)));
+                }
                 final dateKey = DateFormat('dd-MM-yy').format(_controller.selectedMonth.value);
-                final shift = _controller.allShifts[dateKey];
-
+                final shift = _controller.shifts[dateKey];
+                //day_capsules.
                 if (shift == null) {
                   return const Center(child: Text("אין נתונים ליום זה", style: TextStyle(color: Colors.white)));
                 }

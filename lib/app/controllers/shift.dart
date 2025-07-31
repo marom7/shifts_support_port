@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
@@ -13,14 +14,34 @@ class ShiftsController extends GetxController {
   /// תאריך החודש הנבחר
   var selectedMonth = DateTime.now().obs;
   ScrollController scrollController = ScrollController();
-  static double scrollPosition = 0; 
+  double scrollPosition = 0; 
+
+  //final selectedMonth = DateTime.now().obs;
+  //final scrollController = ScrollController();
+  final currentRoute = ''.obs;
 
   @override
   void onInit() {
-    super.onInit();
     fetchShifts();
+   // עדכון הנתיב הנוכחי בכל שינוי
+    ever(Get.routing.obs, (Routing? routing) {
+      currentRoute.value = routing?.current ?? '';
+    });
+    // אתחול הנתיב הראשוני
+    currentRoute.value = Get.currentRoute;
+    super.onInit();
   }
 
+  void selectDate(DateTime date) {
+    selectedMonth.value = date;
+    HapticFeedback.lightImpact();
+  }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
+  }
   /// שליפה מלאה מה-RTDB
   Future<void> fetchShifts() async {
     try {
@@ -85,36 +106,5 @@ class ShiftsController extends GetxController {
     }
   }
 
-  //////////////////////////////////////////////
-  ///      גלילה של רשימת הימים      /////////
-  /////////////////////////////////////////////
-  // גלילה למיקום ספציפי (בפיקסלים)
-  void scrollToPosition(double offset) {
-    scrollController.animateTo(
-      offset,
-      duration: const Duration(seconds: 1),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  // גלילה לתחילת הרשימה
-  void scrollToStart() {
-    scrollController.jumpTo(0); // מיידי
-    // או: _scrollController.animateTo(0, ...)
-  }
-
-  // גלילה לסוף הרשימה
-  void scrollToEnd() {
-    scrollController.jumpTo(scrollController.position.maxScrollExtent);
-  }
-
-  // גלילה לפריט ספציפי (אם כל הפריטים באותו רוחב)
-  void scrollToIndex(int index) {
-    const itemWidth = 116; // רוחב פריט + מרווחים
-      scrollController.animateTo(
-      index.toDouble() * itemWidth,
-      duration: const Duration(seconds: 1),
-      curve: Curves.easeInOut,
-    );
-  }
+  
 }
