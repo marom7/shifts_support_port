@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/app/controllers/shift.dart'; // Adjust the import based on your project structure
@@ -6,7 +8,7 @@ import '/app/controllers/shift.dart'; // Adjust the import based on your project
 Widget buildDayCapsules(ShiftsController controller) {
   final now = DateTime.now();
   final daysInMonth = DateUtils.getDaysInMonth(now.year, now.month);
-  //ScrollController scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
   String getHebrewDayLetter(DateTime date) {
     const days = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'שבת'];
     // Flutter: יום ראשון = 7, יום שני = 1 ... יום שבת = 6
@@ -20,8 +22,9 @@ Widget buildDayCapsules(ShiftsController controller) {
   ///      גלילה של רשימת הימים      //
   ///////////////////////////////////////
   // גלילה למיקום ספציפי (בפיקסלים)
+  
   void scrollToPosition(double offset) {
-    controller.scrollController.animateTo(
+    scrollController.animateTo(
       offset,
       duration: const Duration(seconds: 1),
       curve: Curves.easeInOut,
@@ -30,25 +33,25 @@ Widget buildDayCapsules(ShiftsController controller) {
 
   // גלילה לתחילת הרשימה
   void scrollToStart() {
-    controller.scrollController.jumpTo(0); // מיידי
+    scrollController.jumpTo(0); // מיידי
     // או: _scrollController.animateTo(0, ...)
   }
 
   // גלילה לסוף הרשימה
   void scrollToEnd() {
-    controller.scrollController.jumpTo(controller.scrollController.position.maxScrollExtent);
+    scrollController.jumpTo(scrollController.position.maxScrollExtent);
   }
 
   // גלילה לפריט ספציפי (אם כל הפריטים באותו רוחב)
   void scrollToIndex(int index) {
     const itemWidth = 116; // רוחב פריט + מרווחים
-      controller.scrollController.animateTo(
+      scrollController.animateTo(
       index.toDouble() * itemWidth,
       duration: const Duration(seconds: 1),
       curve: Curves.easeInOut,
     );
   }
-
+  
   return Obx(() {
     final selectedDay =
         controller.selectedMonth.value.day; // שימוש ישיר ב-observable
@@ -56,7 +59,7 @@ Widget buildDayCapsules(ShiftsController controller) {
     return SizedBox(
       height: 70,
       child: ListView.builder(
-        controller: controller.scrollController,
+        controller: scrollController,
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 8),
         itemCount: daysInMonth,
@@ -66,7 +69,7 @@ Widget buildDayCapsules(ShiftsController controller) {
           final isSelected = selectedDay == day;
           try {
             // אם יש גלילה קודמת, גלול למיקום הקודם
-            if (controller.scrollPosition != 0) {
+            if (scrollController.position.pixels != 0) {
               scrollToIndex(5); // גלילה למיקום הקודם
               //controller.scrollController.jumpTo(controller.scrollPosition);
             }
@@ -78,7 +81,7 @@ Widget buildDayCapsules(ShiftsController controller) {
           return GestureDetector(
             onTap:  () { 
               controller.selectedMonth.value = date; // עדכון התאריך הנבחר  
-              controller.scrollPosition = controller.scrollController.position.pixels; //  מיקום הגלילה
+              //scrollController.position.pixels = controller.scrollController.position.pixels; //  מיקום הגלילה
               //controller.scrollPosition = scrollController.position.pixels;
               //scrollController.jumpTo(controller.scrollPosition);
               //controller.selectedMonth.value = DateTime(now.year, now.month, day);  

@@ -1,4 +1,5 @@
-// ignore_for_file: unused_local_variable, use_super_parameters
+
+// ignore_for_file: use_super_parameters
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,7 +23,7 @@ class _DayCapsulesState extends State<DayCapsules> {
     _scrollController = ScrollController();
     _currentMonth = DateTime.now();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToCurrentDay();
+      _scrollToThisDay();
     });
   }
 
@@ -30,15 +31,25 @@ class _DayCapsulesState extends State<DayCapsules> {
   void didUpdateWidget(covariant DayCapsules oldWidget) {
     super.didUpdateWidget(oldWidget);
     final now = DateTime.now();
-    if (now.month != _currentMonth.month || now.year != _currentMonth.year) {
+    //widget.controller.scrollPosition = now;
+    //if (now.month != _currentMonth.month || now.year != _currentMonth.year) {
       _currentMonth = now;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToCurrentDay();
+        _scrollToDay(widget.controller.selectedMonth.value.day); // Scroll to the 13th day as an example
       });
-    }
+    //}
   }
 
-  void _scrollToCurrentDay() {
+  // גלילה לפריט ספציפי (אם כל הפריטים באותו רוחב)
+  void _scrollToDay(int index) {
+    const itemWidth = 40; // רוחב פריט + מרווחים
+      _scrollController.animateTo(
+      index.toDouble() * itemWidth,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeInOut,
+    );
+  }
+  void _scrollToThisDay() {
     if (!_scrollController.hasClients) return;
 
     final now = DateTime.now();
@@ -50,6 +61,7 @@ class _DayCapsulesState extends State<DayCapsules> {
 
     const itemWidth = 60.0;
     const horizontalMargin = 4.0;
+    // ignore: unused_local_variable
     const padding = 8.0;
     const totalItemWidth = itemWidth + horizontalMargin * 2;
     

@@ -49,6 +49,7 @@ void main() async {
   Get.put(RouteObserver<PageRoute>(), permanent: true);
   runApp(
     GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       locale: const Locale('he'), // עברית
       initialRoute: '/login',
       navigatorObservers: [Get.find<RouteObserver<PageRoute>>()],

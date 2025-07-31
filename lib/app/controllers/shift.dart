@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -13,11 +13,8 @@ class ShiftsController extends GetxController {
 
   /// תאריך החודש הנבחר
   var selectedMonth = DateTime.now().obs;
-  ScrollController scrollController = ScrollController();
-  double scrollPosition = 0; 
-
-  //final selectedMonth = DateTime.now().obs;
-  //final scrollController = ScrollController();
+  late double scrollPosition=-1;
+  
   final currentRoute = ''.obs;
 
   @override
@@ -39,7 +36,7 @@ class ShiftsController extends GetxController {
 
   @override
   void onClose() {
-    scrollController.dispose();
+    //scrollController.dispose();
     super.onClose();
   }
   /// שליפה מלאה מה-RTDB
@@ -108,3 +105,9 @@ class ShiftsController extends GetxController {
 
   
 }
+
+//ScrollController scrollController = ScrollController();
+  //double scrollPosition = 0; 
+
+  //final selectedMonth = DateTime.now().obs;
+  //final scrollController = ScrollController();

@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '/app/views/widgets/build_shift_card.dart';
 import '/app/controllers/shift.dart';
 //import 'widgets/build_day_capsules.dart' as day_capsules;
-import 'widgets/day_capsules.dart' as day_capsules; // Importing the DayCapsules widget by DeepSeek
+import 'widgets/days_capsules.dart' as day_capsules; // Importing the DayCapsules widget by DeepSeek
 
 class ShiftPage extends StatelessWidget {
   final ShiftsController _controller = Get.put(ShiftsController());
@@ -17,6 +17,7 @@ class ShiftPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
+            const SizedBox(height: 7),
             day_capsules.DayCapsules(controller: _controller,), // Using the DayCapsules widget
             Expanded(
               child: Obx(() {
