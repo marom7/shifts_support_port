@@ -35,7 +35,8 @@ class _DayCapsulesState extends State<DayCapsules> {
     //if (now.month != _currentMonth.month || now.year != _currentMonth.year) {
       _currentMonth = now;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToDay(widget.controller.selectedMonth.value.day); // Scroll to the 13th day as an example
+        _scrollToThisDay();
+        //_scrollToDay(widget.controller.selectedMonth.value.day); // Scroll to the 13th day as an example
       });
     //}
   }
@@ -54,7 +55,7 @@ class _DayCapsulesState extends State<DayCapsules> {
 
     final now = DateTime.now();
     final daysInMonth = DateUtils.getDaysInMonth(now.year, now.month);
-    final currentDay = now.day;
+    final currentDay = widget.controller.selectedMonth.value.day;       //==>now.day;
 
     // Ensure current day is within valid range
     if (currentDay < 1 || currentDay > daysInMonth) return;
@@ -75,7 +76,11 @@ class _DayCapsulesState extends State<DayCapsules> {
     final minScroll = _scrollController.position.minScrollExtent;
     final adjustedOffset = scrollOffset.clamp(minScroll, maxScroll);
 
-    _scrollController.jumpTo(adjustedOffset);
+    _scrollController.animateTo(
+      adjustedOffset,
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeInOut,
+    );
   }
 
   String getHebrewDayLetter(DateTime date) {
