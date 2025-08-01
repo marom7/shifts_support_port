@@ -4,6 +4,7 @@ import '../controllers/home.dart';
 import 'shift.dart';
 import 'employees.dart';
 import 'settings.dart';
+import 'users_permit.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends GetView<HomeController> {

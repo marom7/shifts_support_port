@@ -1,6 +1,4 @@
-
-// ignore_for_file: use_super_parameters
-
+// ignore_for_file: use_super_parameters, unused_field
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/app/controllers/shift.dart';
@@ -15,42 +13,26 @@ class DayCapsules extends StatefulWidget {
 
 class _DayCapsulesState extends State<DayCapsules> {
   late ScrollController _scrollController;
-  late DateTime _currentMonth;
+  //late DateTime _currentMonth;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _currentMonth = DateTime.now();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToThisDay();
+      _scrollToCurrentDay();
     });
   }
 
   @override
   void didUpdateWidget(covariant DayCapsules oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final now = DateTime.now();
-    //widget.controller.scrollPosition = now;
-    //if (now.month != _currentMonth.month || now.year != _currentMonth.year) {
-      _currentMonth = now;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToThisDay();
-        //_scrollToDay(widget.controller.selectedMonth.value.day); // Scroll to the 13th day as an example
+        _scrollToCurrentDay();
       });
-    //}
   }
 
-  // גלילה לפריט ספציפי (אם כל הפריטים באותו רוחב)
-  void _scrollToDay(int index) {
-    const itemWidth = 40; // רוחב פריט + מרווחים
-      _scrollController.animateTo(
-      index.toDouble() * itemWidth,
-      duration: const Duration(seconds: 1),
-      curve: Curves.easeInOut,
-    );
-  }
-  void _scrollToThisDay() {
+  void _scrollToCurrentDay() {
     if (!_scrollController.hasClients) return;
 
     final now = DateTime.now();
@@ -146,3 +128,10 @@ class _DayCapsulesState extends State<DayCapsules> {
     });
   }
 }
+
+//widget.controller.scrollPosition = now;
+    //if (now.month != _currentMonth.month || now.year != _currentMonth.year) {
+    //final now = DateTime.now();
+    //  _currentMonth = now;
+    //final now = DateTime.now();
+    //  _currentMonth = now;

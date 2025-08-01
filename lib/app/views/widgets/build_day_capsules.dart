@@ -22,7 +22,7 @@ Widget buildDayCapsules(ShiftsController controller) {
   ///      גלילה של רשימת הימים      //
   ///////////////////////////////////////
   // גלילה למיקום ספציפי (בפיקסלים)
-  
+  /*
   void scrollToPosition(double offset) {
     scrollController.animateTo(
       offset,
@@ -41,7 +41,7 @@ Widget buildDayCapsules(ShiftsController controller) {
   void scrollToEnd() {
     scrollController.jumpTo(scrollController.position.maxScrollExtent);
   }
-
+*/
   // גלילה לפריט ספציפי (אם כל הפריטים באותו רוחב)
   void scrollToIndex(int index) {
     const itemWidth = 116; // רוחב פריט + מרווחים
