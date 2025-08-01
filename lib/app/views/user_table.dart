@@ -29,8 +29,7 @@ class UserTableApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         scaffoldBackgroundColor: Colors.purple.shade50,
-        dialogBackgroundColor: Colors.white,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        visualDensity: VisualDensity.adaptivePlatformDensity, dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
       ),
       home: const UserTableScreen(),
     );
@@ -256,9 +255,9 @@ class _UserTableScreenState extends State<UserTableScreen> {
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
                   columnSpacing: 32.0,
-                  headingRowColor: MaterialStateProperty.all(Colors.purple.shade100),
-                  dataRowColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-                    if (states.contains(MaterialState.selected)) {
+                  headingRowColor: WidgetStateProperty.all(Colors.purple.shade100),
+                  dataRowColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+                    if (states.contains(WidgetState.selected)) {
                       return Colors.purple.shade50;
                     }
                     return Colors.purple.shade50;
