@@ -4,7 +4,9 @@ import '../controllers/home.dart';
 import 'shift.dart';
 import 'employees.dart';
 import 'settings.dart';
-import 'users_permit.dart';
+//import 'users_permissions.dart';
+//import 'user_table.dart';
+
 //import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -18,6 +20,9 @@ class HomeScreen extends GetView<HomeController> {
         () => IndexedStack(
           index: Get.put(HomeController()).currentIndex.value,
           children: [ShiftPage(), EmployeeGridPage(), const SettingsPage()],
+          //const SettingsPage() 
+          //UserPermissionScreen()
+          //const UserTableScreen()
         ),
       ),
       bottomNavigationBar: Obx(
