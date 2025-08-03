@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
-///
+///  final encodedPassword = encodePassword('mm2807'); // Encode the password
 /// Example:
 /// ```dart
 /// import 'firebase_options.dart';

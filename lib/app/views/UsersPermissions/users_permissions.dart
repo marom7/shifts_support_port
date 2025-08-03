@@ -7,6 +7,8 @@ class UserPermission {
 }
 
 class UserPermissionScreen extends StatefulWidget {
+  const UserPermissionScreen({super.key});
+
   @override
   State<UserPermissionScreen> createState() => _UserPermissionScreenState();
 }
@@ -29,18 +31,18 @@ class _UserPermissionScreenState extends State<UserPermissionScreen> {
         permController.clear();
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-          title: Text('הוסף משתמש', textAlign: TextAlign.center),
+          title: const Text('הוסף משתמש', textAlign: TextAlign.center),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(controller: nameController, decoration: InputDecoration(labelText: 'שם')),
-              TextField(controller: permController, decoration: InputDecoration(labelText: 'הרשאות (מופרד בפסיקים)')),
+              TextField(controller: nameController, decoration: const InputDecoration(labelText: 'שם')),
+              TextField(controller: permController, decoration: const InputDecoration(labelText: 'הרשאות (מופרד בפסיקים)')),
             ],
           ),
           actions: [
             ElevatedButton(
-              style: ElevatedButton.styleFrom(shape: StadiumBorder(), backgroundColor: Colors.purple),
-              child: Text('הוסף'),
+              style: ElevatedButton.styleFrom(shape: const StadiumBorder(), backgroundColor: Colors.purple),
+              child: const Text('הוסף'),
               onPressed: () {
                 if (nameController.text.isNotEmpty) {
                   setState(() {
@@ -69,18 +71,18 @@ class _UserPermissionScreenState extends State<UserPermissionScreen> {
       builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-          title: Text('ערוך משתמש', textAlign: TextAlign.center),
+          title: const Text('ערוך משתמש', textAlign: TextAlign.center),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(controller: nameController, decoration: InputDecoration(labelText: 'שם')),
-              TextField(controller: permController, decoration: InputDecoration(labelText: 'הרשאות (מופרד בפסיקים)')),
+              TextField(controller: nameController, decoration: const InputDecoration(labelText: 'שם')),
+              TextField(controller: permController, decoration: const InputDecoration(labelText: 'הרשאות (מופרד בפסיקים)')),
             ],
           ),
           actions: [
             ElevatedButton(
-              style: ElevatedButton.styleFrom(shape: StadiumBorder(), backgroundColor: Colors.orange),
-              child: Text('שמור שינויים'),
+              style: ElevatedButton.styleFrom(shape: const StadiumBorder(), backgroundColor: Colors.orange),
+              child: const Text('שמור שינויים'),
               onPressed: () {
                 setState(() {
                   userList[index].username = nameController.text;
@@ -105,23 +107,23 @@ class _UserPermissionScreenState extends State<UserPermissionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('משתמשים והרשאות', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('משתמשים והרשאות', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.teal,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-        child: Icon(Icons.add, size: 33),
         onPressed: addUser,
         tooltip: 'הוסף משתמש',
+        child: const Icon(Icons.add, size: 33),
       ),
       body: ListView.builder(
         itemCount: userList.length,
         itemBuilder: (context, index) {
           final user = userList[index];
           return Card(
-            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             color: Colors.primaries[index % Colors.primaries.length].shade100,
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -129,21 +131,21 @@ class _UserPermissionScreenState extends State<UserPermissionScreen> {
             ),
             child: ListTile(
               leading: CircleAvatar(
-                child: Text(user.username[0].toUpperCase()),
                 backgroundColor: Colors.primaries[(index + 2) % Colors.primaries.length].shade200,
+                child: Text(user.username[0].toUpperCase()),
               ),
-              title: Text(user.username, style: TextStyle(fontWeight: FontWeight.bold)),
+              title: Text(user.username, style: const TextStyle(fontWeight: FontWeight.bold)),
               subtitle: Text('הרשאות: ${user.permissions.join(' | ')}'),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.edit, color: Colors.deepPurple),
+                    icon: const Icon(Icons.edit, color: Colors.deepPurple),
                     onPressed: () => editUser(index),
                     tooltip: 'ערוך',
                   ),
                   IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red),
+                    icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () => deleteUser(index),
                     tooltip: 'מחק',
                   ),
