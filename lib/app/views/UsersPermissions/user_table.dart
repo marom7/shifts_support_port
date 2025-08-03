@@ -29,8 +29,8 @@ class UserTableApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         scaffoldBackgroundColor: Colors.purple.shade50,
-        visualDensity: VisualDensity.adaptivePlatformDensity, 
-        dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
+        dialogBackgroundColor: Colors.white,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: const UserTableScreen(),
     );
