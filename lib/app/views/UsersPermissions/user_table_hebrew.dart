@@ -1,71 +1,89 @@
+// ignore_for_file: constant_identifier_names
+
 /*
- * A Flutter screen demonstrating a simple data table with edit, add and delete
- * capabilities for managing users and their permissions.  The table is styled
- * with rounded corners and playful colours to give it a light‑hearted feel.
+ * דוגמת מסך Flutter המציגה טבלת משתמשים והרשאות בשפה העברית.
+ * המסך מאפשר להוסיף, לערוך ולמחוק משתמשים בתוך טבלה מעוצבת
+ * עם פינות מעוגלות וצבעים נעימים.  הטקסטים והכפתורים כולם
+ * בעברית, והכיוון הכללי של הממשק הוא מימין לשמאל.
  *
- * To run this example:
- *   1. Ensure you have Flutter installed.
- *   2. Create a new Flutter project or add this file to an existing one.
- *   3. Replace the contents of `lib/main.dart` with the code below, or
- *      import and use `UserTableScreen` from this file.
- *   4. Run `flutter run`.
+ * כדי להריץ:
+ *   1. ודאו ש‑Flutter מותקן.
+ *   2. הוסיפו את הקובץ הזה לתיקיית `lib/` של הפרויקט.
+ *   3. החליפו את תוכן `main.dart` בקוד זה או ייבאו את
+ *      המחלקה `HebrewUserTableScreen` בתוך הפרויקט שלכם.
+ *   4. הריצו `flutter run`.
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  runApp(const UserTableApp());
+  runApp(const HebrewUserTableApp());
 }
-
-/// Root widget for the user table demonstration app.
-class UserTableApp extends StatelessWidget {
-  const UserTableApp({super.key});
+enum UserRole { ADMIN, EDITOR, VIEWER }
+/// וידג'ט שורש עבור האפליקציה בעברית.
+class HebrewUserTableApp extends StatelessWidget {
+  const HebrewUserTableApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'User Permissions Table',
+      title: "טבלת הרשאות משתמשים",
+      locale: const Locale('he'),
+      supportedLocales: const [Locale('he')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      // מגדיר את הכיוון הכללי של הטקסטים והאלמנטים לעברית (מימין לשמאל)
+      builder: (BuildContext context, Widget? child) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
       theme: ThemeData(
         primarySwatch: Colors.purple,
         scaffoldBackgroundColor: Colors.purple.shade50,
-        visualDensity: VisualDensity.adaptivePlatformDensity, dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
+        visualDensity: VisualDensity.adaptivePlatformDensity, 
+        dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
       ),
-      home: const UserTableScreen(),
+      home: const HebrewUserTableScreen(),
     );
   }
 }
 
-/// Model representing a single user with a name and permission level.
+/// מודל המייצג משתמש בודד עם שם והרשאה.
 class User {
   String name;
-  String permission;
+  UserRole permission;
 
   User({required this.name, required this.permission});
 }
 
-/// Stateful widget hosting a table of users and their permissions.  Users can
-/// be added, edited or removed via dialog modals.  The table sits inside a
-/// rounded card for a softer look, and accent colours are used throughout.
-class UserTableScreen extends StatefulWidget {
-  const UserTableScreen({super.key});
+/// וידג'ט מציג טבלה של משתמשים והרשאות בעברית.
+class HebrewUserTableScreen extends StatefulWidget {
+  const HebrewUserTableScreen({super.key});
 
   @override
-  State<UserTableScreen> createState() => _UserTableScreenState();
+  State<HebrewUserTableScreen> createState() => _HebrewUserTableScreenState();
 }
 
-class _UserTableScreenState extends State<UserTableScreen> {
-  /// List of users displayed in the table.
+class _HebrewUserTableScreenState extends State<HebrewUserTableScreen> {
+
+  /// רשימת המשתמשים המוצגת בטבלה.
   final List<User> _users = <User>[
-    User(name: 'Alice', permission: 'Admin'),
-    User(name: 'Bob', permission: 'Editor'),
-    User(name: 'Charlie', permission: 'Viewer'),
+    User(name: "אליס", permission: UserRole.ADMIN),
+    User(name: "בוב", permission: UserRole.EDITOR),
+    User(name: "צארלי", permission: UserRole.VIEWER),
   ];
 
-  /// Display a dialog for adding a new user to the table.
+  /// מציג חלון הוספת משתמש חדש.
   Future<void> _addUserDialog() async {
-    String newName = '';
-    String newPermission = '';
+    String newName = "";
+    UserRole newPermission = UserRole.VIEWER;
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -74,13 +92,13 @@ class _UserTableScreenState extends State<UserTableScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          title: const Text('Add User'),
+          title: const Text("הוסף משתמש"),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 TextField(
                   decoration: const InputDecoration(
-                    labelText: 'Name',
+                    labelText: "שם",
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (String value) {
@@ -90,11 +108,11 @@ class _UserTableScreenState extends State<UserTableScreen> {
                 const SizedBox(height: 12.0),
                 TextField(
                   decoration: const InputDecoration(
-                    labelText: 'Permission',
+                    labelText: "הרשאה",
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (String value) {
-                    newPermission = value;
+                    newPermission = UserRole.values.where((element) => element.toString().split('.')[1] == value).first; 
                   },
                 ),
               ],
@@ -102,7 +120,7 @@ class _UserTableScreenState extends State<UserTableScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: const Text("ביטול"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -111,9 +129,9 @@ class _UserTableScreenState extends State<UserTableScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.purple,
               ),
-              child: const Text('Add'),
+              child: const Text("הוסף"),
               onPressed: () {
-                if (newName.isNotEmpty && newPermission.isNotEmpty) {
+                if (newName.isNotEmpty) {
                   setState(() {
                     _users.add(User(name: newName, permission: newPermission));
                   });
@@ -127,11 +145,11 @@ class _UserTableScreenState extends State<UserTableScreen> {
     );
   }
 
-  /// Display a dialog for editing an existing user at the given index.
+  /// מציג חלון עריכת משתמש קיים.
   Future<void> _editUserDialog(int index) async {
     final User user = _users[index];
     String newName = user.name;
-    String newPermission = user.permission;
+    UserRole newPermission = user.permission;
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -140,13 +158,13 @@ class _UserTableScreenState extends State<UserTableScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          title: const Text('Edit User'),
+          title: const Text("ערוך משתמש"),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 TextField(
                   decoration: const InputDecoration(
-                    labelText: 'Name',
+                    labelText: "שם",
                     border: OutlineInputBorder(),
                   ),
                   controller: TextEditingController(text: newName),
@@ -155,14 +173,22 @@ class _UserTableScreenState extends State<UserTableScreen> {
                   },
                 ),
                 const SizedBox(height: 12.0),
-                TextField(
+                DropdownButtonFormField<UserRole>(
+                  value: newPermission,
                   decoration: const InputDecoration(
-                    labelText: 'Permission',
+                    labelText: "הרשאה",
                     border: OutlineInputBorder(),
                   ),
-                  controller: TextEditingController(text: newPermission),
-                  onChanged: (String value) {
-                    newPermission = value;
+                  items: UserRole.values.map((UserRole role) {
+                    return DropdownMenuItem<UserRole>(
+                      value: role,
+                      child: Text(role.toString().split('.')[1]),
+                    );
+                  }).toList(),
+                  onChanged: (UserRole? value) {
+                    if (value != null) {
+                      newPermission = value;
+                    }
                   },
                 ),
               ],
@@ -170,18 +196,18 @@ class _UserTableScreenState extends State<UserTableScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: const Text("ביטול"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
+                backgroundColor: Colors.purple.shade300, // Updated to a lighter purple shade
               ),
-              child: const Text('Save'),
+              child: const Text("שמור"),
               onPressed: () {
-                if (newName.isNotEmpty && newPermission.isNotEmpty) {
+                if (newName.isNotEmpty) {
                   setState(() {
                     _users[index] = User(name: newName, permission: newPermission);
                   });
@@ -195,7 +221,7 @@ class _UserTableScreenState extends State<UserTableScreen> {
     );
   }
 
-  /// Prompt for confirmation before deleting a user at the given index.
+  /// מבקש אישור לפני מחיקת משתמש.
   Future<void> _deleteUser(int index) async {
     final bool? confirm = await showDialog<bool>(
       context: context,
@@ -204,11 +230,11 @@ class _UserTableScreenState extends State<UserTableScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          title: const Text('Delete User'),
-          content: Text('Are you sure you want to delete ${_users[index].name}?'),
+          title: const Text("מחק משתמש"),
+          content: Text("האם אתה בטוח שברצונך למחוק את ${_users[index].name}?"),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: const Text("ביטול"),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
@@ -217,7 +243,7 @@ class _UserTableScreenState extends State<UserTableScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.redAccent,
               ),
-              child: const Text('Delete'),
+              child: const Text("מחק"),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
@@ -237,7 +263,7 @@ class _UserTableScreenState extends State<UserTableScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Permissions'),
+        title: const Text("הרשאות משתמשים"),
         elevation: 4.0,
       ),
       body: Center(
@@ -256,34 +282,37 @@ class _UserTableScreenState extends State<UserTableScreen> {
                 child: DataTable(
                   columnSpacing: 32.0,
                   headingRowColor: WidgetStateProperty.all(Colors.purple.shade100),
-                  dataRowColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+                  dataRowColor: WidgetStateProperty.resolveWith<Color?>(
+                      (Set<WidgetState> states) {
                     if (states.contains(WidgetState.selected)) {
                       return Colors.purple.shade50;
                     }
                     return Colors.purple.shade50;
                   }),
                   columns: const <DataColumn>[
-                    DataColumn(label: Text('Name')), 
-                    DataColumn(label: Text('Permission')), 
-                    DataColumn(label: Text('Actions')),
+                    DataColumn(label: Text("שם")),
+                    DataColumn(label: Text("הרשאה")),
+                    DataColumn(label: Text("פעולות")),
                   ],
                   rows: List<DataRow>.generate(
                     _users.length,
                     (int index) => DataRow(
                       cells: <DataCell>[
                         DataCell(Text(_users[index].name)),
-                        DataCell(Text(_users[index].permission)),
+                        DataCell(Text(_users[index].permission.toString().split('.')[1])),
                         DataCell(Row(
                           children: <Widget>[
                             IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.blueAccent),
+                              icon: const Icon(Icons.edit,
+                                  color: Colors.blueAccent),
                               onPressed: () => _editUserDialog(index),
-                              tooltip: 'Edit',
+                              tooltip: "ערוך",
                             ),
                             IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.redAccent),
+                              icon: const Icon(Icons.delete,
+                                  color: Colors.redAccent),
                               onPressed: () => _deleteUser(index),
-                              tooltip: 'Delete',
+                              tooltip: "מחק",
                             ),
                           ],
                         )),
@@ -299,8 +328,8 @@ class _UserTableScreenState extends State<UserTableScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _addUserDialog,
         icon: const Icon(Icons.add),
-        label: const Text('Add User'),
-        backgroundColor: Colors.purple,
+        label: const Text("הוסף משתמש"),
+        backgroundColor: Colors.purple.shade300,
       ),
     );
   }

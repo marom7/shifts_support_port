@@ -27,7 +27,7 @@ class LoginScreen extends StatelessWidget {
                     child: const Padding(
                       padding: EdgeInsets.only(top: 80),
                       child: Text(
-                        'תמיכה -ניהול משמרות'  ,
+                        'תמיכה -ניהול משמרות' ,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 32,
