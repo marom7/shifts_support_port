@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '/app/views/widgets/build_shift_card.dart';
+import 'widgets/build_shift_card.dart';
 import '/app/controllers/shift.dart';
 //import 'widgets/build_day_capsules.dart' as day_capsules;
 import 'widgets/days_capsules.dart' as day_capsules; // Importing the DayCapsules widget by DeepSeek
@@ -34,14 +34,14 @@ class ShiftPage extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      buildShiftCard('משמרת בוקר', shift.hd1, shift.it1, (v) {
+                      buildShiftCard('משמרת בוקר', shift.hd1.obs, shift.it1.obs, (v) {
                         shift.hd1 = v; // טכנאי בוקר
                         //controller.updateShift(dateKey, shift);
                       }, (v) {
                         shift.it1 = v; // מנהל רשת בוקר
                       }),
                       const SizedBox(height: 16),
-                      buildShiftCard('משמרת ערב', shift.hd2, shift.it2, (v) {
+                      buildShiftCard('משמרת ערב', shift.hd2.obs, shift.it2.obs, (v) {
                         shift.hd2 = v; // טכנאי ערב
                       }, (v) {
                         shift.it2 = v; // מנהל רשת ערב

@@ -1,41 +1,61 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+//import 'package:shifts_employees/app/Utils/phone_utiles.dart';
 import 'package:shifts_employees/app/models/employee.dart';
 import 'package:shifts_employees/app/views/widgets/dropdown_row.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '/app/controllers/employee.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Import for WhatsApp icon
-
-Widget buildShiftCard(String title, String hd, String it,
-    void Function(String) onchangedHd, void Function(String) onchangedIt) {
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:shifts_employees/app/views/widgets/dropdown_row.dart';
+import 'package:url_launcher/url_launcher.dart';
+Widget buildShiftCard(
+  String title,
+  RxString hd,            // <-- היה String
+  RxString it,            // <-- היה String
+  void Function(String) onChangedHd,
+  void Function(String) onChangedIt,
+) {
   final EmployeeController controller = Get.put(EmployeeController());
- 
+
   final List<Employee> techs = controller.getEmployeesByDuty(['טכנאי', 'מפעיל מחשב']);
   final List<Employee> managers = controller.getEmployeesByDuty(['מנהל רשת', 'סייבר']);
-      
+
   if (controller.employees.isEmpty) {
     return const Center(child: CircularProgressIndicator());
   }
 
-   Future<void> sendWhatsApp(String phone, String message) async {
-    String waPhone = phone.replaceAll('-', '').replaceFirst('0', '972');
-    String uri ="https://wa.me/$waPhone?text=${Uri.encodeComponent(message)}";//'https://wa.me/${phone.replaceAll('-', '')}
-    final Uri whatsappUri = Uri.parse(uri);
-    //..if (await canLaunchUrl(whatsappUri)) {
-      await launchUrl(whatsappUri);
-    //} else {
-    //  Get.snackbar('Error', 'Could not launch WhatsApp');
-  }
-  
-
-  Future<void> makeCall(String phone) async {
-    final Uri telUri = Uri(scheme: 'tel', path: phone);
-    if (await canLaunchUrl(telUri)) {
-      await launchUrl(telUri);
-    } else {
-      Get.snackbar('Error', 'Could not make the call');
+  Future<void> sendWhatsApp(Employee employee) async {
+    try {
+      final waPhone = employee.phone.replaceAll('-', '').replaceFirst(RegExp(r'^0'), '972');
+      final defaultMessage = "שלום ${employee.name}, יש בעיה שדורשת את תשומת לבך.";
+      final uri = Uri.parse("https://wa.me/$waPhone?text=${Uri.encodeComponent(defaultMessage)}");
+      //if (await 
+      //canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      //} else {
+      // Get.snackbar('שגיאה', 'לא ניתן לפתוח את WhatsApp');
+      
+    } catch (e) {
+      Get.snackbar('שגיאה', 'בעיה בשליחת הודעה: ${e.toString()}');
     }
   }
+
+  Future<void> makeCall(Employee employee) async {
+    try {
+      final telUri = Uri(scheme: 'tel', path: employee.phone);
+      if (await canLaunchUrl(telUri)) {
+        await launchUrl(telUri);
+      } else {
+        Get.snackbar('שגיאה', 'לא ניתן לבצע שיחה');
+      }
+    } catch (e) {
+      Get.snackbar('שגיאה', 'בעיה בחיוג: ${e.toString()}');
+    }
+  }
+
+  Employee _findByName(List<Employee> list, String name) =>
+      list.firstWhere((e) => e.name == name);
 
   return Card(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -49,75 +69,101 @@ Widget buildShiftCard(String title, String hd, String it,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title,
-              style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
-          const SizedBox(height: 8),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+          const SizedBox(height: 12),
+
+          // HD Row
           Row(
             children: [
               Expanded(
-                child: SizedBox(
-                  height: 50, // Reduce the height of the dropdown
-                  child: buildDropdown(hd.obs, techs.map((e) => e.name).toList(), onchangedHd),
+                child: buildDropdown(
+                  hd,       // <-- מעבירים RxString אמיתי
+                  techs.map((e) => e.name).toList(),
+                  (v) { hd.value = v; onChangedHd(v); },
+                  label: "טכנאי" // <-- מעדכן Rx וגם קורא לקולבק
                 ),
               ),
-              const SizedBox(width: 2),
+              const SizedBox(width: 10),
               Row(
                 children: [
-                  ElevatedButton(
-                    onPressed: () => sendWhatsApp(techs.firstWhere((e) => e.name == hd).phone, "יש בעיה"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green, 
-                      minimumSize: Size.zero, // Minimum size
-                      padding: EdgeInsets.zero, // Remove padding
+                  IconButton(
+                    icon: const Icon(FontAwesomeIcons.whatsapp, size: 28),
+                    color: Colors.white,
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.all(10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
-                    child: const Icon(FontAwesomeIcons.whatsapp), // WhatsApp icon
+                    onPressed: () {
+                      if (hd.value.isEmpty) return;
+                      final employee = _findByName(techs, hd.value); // <-- הערך העדכני
+                      sendWhatsApp(employee);
+                    },
                   ),
-                  const SizedBox(width: 2),
-                  ElevatedButton(
-                    onPressed: () => makeCall(techs.firstWhere((e) => e.name == hd).phone),
-                    style: ElevatedButton.styleFrom(
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.phone, size: 28),
+                    color: Colors.white,
+                    style: IconButton.styleFrom(
                       backgroundColor: Colors.blue,
-                      minimumSize: Size.zero, // Minimum size
-                      padding: EdgeInsets.zero, // Remove padding
+                      padding: const EdgeInsets.all(10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
-                    child: const Icon(Icons.phone), // Phone icon
+                    onPressed: () {
+                      if (hd.value.isEmpty) return;
+                      final employee = _findByName(techs, hd.value); // <-- הערך העדכני
+                      makeCall(employee);
+                    },
                   ),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 7),
+
+          const SizedBox(height: 16),
+
+          // IT Row
           Row(
             children: [
               Expanded(
-                child: SizedBox(
-                  height: 50, // Reduce the height of the dropdown
-                  child: buildDropdown(it.obs, managers.map((e) => e.name).toList(), onchangedIt),
+                child: buildDropdown(
+                  it,
+                  managers.map((e) => e.name).toList(),
+                  (v) { it.value = v; onChangedIt(v); },
+                  label: "מנהל רשת" // <-- מעדכן Rx וגם קורא לקולבק''
                 ),
               ),
-              const SizedBox(width: 2),
+              const SizedBox(width: 10),
               Row(
                 children: [
-                  ElevatedButton(
-                    onPressed: () => sendWhatsApp(managers.firstWhere((e) => e.name == it).phone, "יש בעיה"),
-                    style: ElevatedButton.styleFrom(
+                  IconButton(
+                    icon: const Icon(FontAwesomeIcons.whatsapp, size: 28),
+                    color: Colors.white,
+                    style: IconButton.styleFrom(
                       backgroundColor: Colors.green,
-                      minimumSize:  Size.zero, // Minimum size
-                      padding: EdgeInsets.zero, // Remove padding
+                      padding: const EdgeInsets.all(10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
-                    child: const Icon(FontAwesomeIcons.whatsapp), // WhatsApp icon
+                    onPressed: () {
+                      if (it.value.isEmpty) return;
+                      final employee = _findByName(managers, it.value); // <-- הערך העדכני
+                      sendWhatsApp(employee);
+                    },
                   ),
-                  const SizedBox(width: 2),
-                  ElevatedButton(
-                    onPressed: () => makeCall(managers.firstWhere((e) => e.name == it).phone),
-                    style: ElevatedButton.styleFrom(
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.phone, size: 28),
+                    color: Colors.white,
+                    style: IconButton.styleFrom(
                       backgroundColor: Colors.blue,
-                      minimumSize:   Size.zero, // Minimum size
-                      padding: EdgeInsets.zero, // Remove padding
+                      padding: const EdgeInsets.all(10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
-                    child: const Icon(Icons.phone), // Phone icon
+                    onPressed: () {
+                      if (it.value.isEmpty) return;
+                      final employee = _findByName(managers, it.value); // <-- הערך העדכני
+                      makeCall(employee);
+                    },
                   ),
                 ],
               ),
@@ -128,4 +174,3 @@ Widget buildShiftCard(String title, String hd, String it,
     ),
   );
 }
-
