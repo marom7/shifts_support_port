@@ -25,10 +25,25 @@ Widget buildShiftCard(
     return const Center(child: CircularProgressIndicator());
   }
 
+  // ברכה לפי השעה המקומית במכשיר
+  String greetingByLocalTime([DateTime? now]) {
+    final int h = (now ?? DateTime.now()).hour;
+    if (h >= 5 && h < 12) return 'בוקר טוב';
+    if (h >= 12 && h < 16) return 'צהריים טובים';
+    if (h >= 16 && h < 22) return 'ערב טוב';
+    return 'שלום'; // לילה/שעות מאוחרות
+  }
+
+  // בניית טקסט לוואטסאפ כולל ברכה ושם העובד
+  String buildWaMessageForEmployee(Employee e, {String? extra}) {
+    final g = greetingByLocalTime();
+    return '$g ${e.name}, ${extra ?? ''}';
+  }
+
   Future<void> sendWhatsApp(Employee employee) async {
     try {
       final waPhone = employee.phone.replaceAll('-', '').replaceFirst(RegExp(r'^0'), '972');
-      final defaultMessage = "שלום ${employee.name}, יש בעיה שדורשת את תשומת לבך.";
+      String defaultMessage = buildWaMessageForEmployee(employee, extra: 'יש תקלה');
       final uri = Uri.parse("https://wa.me/$waPhone?text=${Uri.encodeComponent(defaultMessage)}");
       //if (await 
       //canLaunchUrl(uri)) {
