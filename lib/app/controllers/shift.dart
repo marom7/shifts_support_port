@@ -14,11 +14,12 @@ class ShiftsController extends GetxController {
   /// תאריך החודש הנבחר
   var selectedMonth = DateTime.now().obs;
   late double scrollPosition=-1;
-  
+  //RxBool isSaturday = false.obs; 
   final currentRoute = ''.obs;
 
   @override
   void onInit() {
+    //isSaturday.value = DateTime.now().weekday == DateTime.saturday;
     fetchShifts();
    // עדכון הנתיב הנוכחי בכל שינוי
     ever(Get.routing.obs, (Routing? routing) {

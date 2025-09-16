@@ -12,6 +12,8 @@ class ShiftPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   
+    // בניית המסך הרגיל
     return Scaffold(
       backgroundColor: const Color(0xFF225E75),
       body: SafeArea(
@@ -30,8 +32,15 @@ class ShiftPage extends StatelessWidget {
                 if (shift == null) {
                   return const Center(child: Text("אין נתונים ליום זה", style: TextStyle(color: Colors.white)));
                 }
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
+                if (_controller.selectedMonth.value.weekday == DateTime.saturday) {
+                  return holidayFullScreen(
+                    'שבת שלום!\nאין משמרות בשבת',
+                    assetPng: 'assets/images/shabbat.png',
+                    bg: const Color(0xFF1A374D),
+                  );
+                }
+                return SafeArea(
+                 // padding: const EdgeInsets.all(4),
                   child: Column(
                     children: [
                         buildShiftCard('משמרת בוקר', shift.hd1.obs, shift.it1.obs, (v) {
@@ -39,13 +48,13 @@ class ShiftPage extends StatelessWidget {
                         }, (v) {
                           shift.it1 = v; // מנהל רשת בוקר
                         }),
-                        const SizedBox(height: 16),
+                        //const SizedBox(height: 1),
                         buildShiftCard('משמרת ערב', shift.hd2.obs, shift.it2.obs, (v) {
                           shift.hd2 = v; // טכנאי ערב
                         }, (v) {
                           shift.it2 = v; // מנהל רשת ערב
                         }),
-                        const SizedBox(height: 16),
+                        //const SizedBox(height: 1),
                         // ↓↓↓ חדש: לילה
                         buildShiftCard('כוננות לילה', shift.hd3.obs, shift.it3.obs, (v) {
                           shift.hd3 = v; // טכנאי לילה
@@ -58,12 +67,12 @@ class ShiftPage extends StatelessWidget {
               }),   
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 2),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFF39B34),
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 4),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 ),
                 onPressed: () {
                   final dateKey = DateFormat('dd-MM-yy').format(_controller.selectedMonth.value);
@@ -82,5 +91,42 @@ class ShiftPage extends StatelessWidget {
     );
   }
 
+  Widget holidayFullScreen(String title, {String? assetPng, Color? bg}) {
+ // final v = assetPng != null && bg != null
+   //   ? HolidayVisuals(title, assetPng, bg)
+   //   : visualsFor(title);
+
+  return Container(
+    color: bg ?? const Color(0xFF225E75),
+    width: double.infinity,
+    height: double.infinity,
+    child: SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(assetPng ?? '', width: 220, height: 220, fit: BoxFit.contain),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          //const SizedBox(height: 8),
+          //const Text(
+         //   'אין משמרות בתאריך זה',
+         //   style: TextStyle(color: Colors.white70, fontSize: 16),
+         // ),
+        ],
+      ),
+    ),
+  );
 }
-//controller.updateShift(dateKey, shift);
+
+}

@@ -1,21 +1,19 @@
+//import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/home.dart';
 import 'shift.dart';
 import 'employees.dart';
 import 'settings.dart';
-//import 'user_permissions_list_view.dart';
-//import 'user_table.dart';
-
-//import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    String title = 'ניהול משמרות ${getMonthName(DateTime.now().month)}-${DateTime.now().year}';
     return Scaffold(
-      appBar: AppBar(title: const Text('ניהול משמרות'), centerTitle: true),
+      appBar: AppBar(title: Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[900])), centerTitle: true),
       body: Obx(
         () => IndexedStack(
           index: Get.put(HomeController()).currentIndex.value,
@@ -47,4 +45,17 @@ class HomeScreen extends GetView<HomeController> {
       ),
     );
   }
+
+  String getMonthName(int month) {
+    const monthNames = [
+      'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
+      'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'
+    ];
+    return monthNames[month - 1];
+  }
 }
+
+//import 'user_permissions_list_view.dart';
+//import 'user_table.dart';
+
+//import 'package:google_fonts/google_fonts.dart';

@@ -18,8 +18,8 @@ Widget buildShiftCard(
 ) {
   final EmployeeController controller = Get.put(EmployeeController());
 
-  final List<Employee> techs = controller.getEmployeesByDuty(['טכנאי', 'מפעיל מחשב']);
-  final List<Employee> managers = controller.getEmployeesByDuty(['מנהל רשת', 'סייבר']);
+  final List<Employee> hdEmps = controller.getEmployeesByDuty(['טכנאי', 'מפעיל מחשב']);
+  final List<Employee> itEmps = controller.getEmployeesByDuty(['מנהל רשת', 'סייבר']);
 
   if (controller.employees.isEmpty) {
     return const Center(child: CircularProgressIndicator());
@@ -31,19 +31,20 @@ Widget buildShiftCard(
     if (h >= 5 && h < 12) return 'בוקר טוב';
     if (h >= 12 && h < 16) return 'צהריים טובים';
     if (h >= 16 && h < 22) return 'ערב טוב';
+    if (h >= 22 || h < 5) return 'לילה טוב';
     return 'שלום'; // לילה/שעות מאוחרות
   }
 
   // בניית טקסט לוואטסאפ כולל ברכה ושם העובד
   String buildWaMessageForEmployee(Employee e, {String? extra}) {
     final g = greetingByLocalTime();
-    return '$g ${e.name}, ${extra ?? ''}';
+    return '$g ${e.name.contains(' ') ? e.name.split(' ')[0] : e.name}, ${extra ?? ''}';
   }
-
+ 
   Future<void> sendWhatsApp(Employee employee) async {
     try {
       final waPhone = employee.phone.replaceAll('-', '').replaceFirst(RegExp(r'^0'), '972');
-      String defaultMessage = buildWaMessageForEmployee(employee, extra: 'יש תקלה');
+      String defaultMessage = buildWaMessageForEmployee(employee, extra: 'יש תקלה ');
       final uri = Uri.parse("https://wa.me/$waPhone?text=${Uri.encodeComponent(defaultMessage)}");
       //if (await 
       //canLaunchUrl(uri)) {
@@ -71,29 +72,38 @@ Widget buildShiftCard(
 
   Employee _findByName(List<Employee> list, String name) =>
       list.firstWhere((e) => e.name == name);
-
+  Color _getColorByShift(String shift) {
+    switch (shift.split(' ').last) {
+      case 'בוקר':
+        return const Color.fromARGB(255, 79, 198, 182);
+      case 'ערב':
+        return const Color.fromARGB(255, 41, 158, 212);
+      case 'לילה':
+        return const Color.fromARGB(255, 36, 102, 146);
+    }
+     return Colors.grey; // ברירת מחדל
+  } 
+  
   return Card(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-    margin: const EdgeInsets.all(8),
-    color: title == 'משמרת בוקר'
-        ? const Color.fromARGB(255, 79, 198, 182)
-        : const Color.fromARGB(255, 41, 158, 212),
+    margin: const EdgeInsets.all(12),
+    color: _getColorByShift(title),
     child: Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-          const SizedBox(height: 12),
-
+          Text(title,  // כותרת המשמרת
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white)),
+          const SizedBox(height: 4),
+          // ↓↓↓ שורות בחירה ופעולות ↓↓↓
           // HD Row
           Row(
             children: [
               Expanded(
                 child: buildDropdown(
                   hd,       // <-- מעבירים RxString אמיתי
-                  techs.map((e) => e.name).toList(),
+                  hdEmps.map((e) => e.name).toList(),
                   (v) { hd.value = v; onChangedHd(v); },
                   label: "טכנאי" // <-- מעדכן Rx וגם קורא לקולבק
                 ),
@@ -111,7 +121,7 @@ Widget buildShiftCard(
                     ),
                     onPressed: () {
                       if (hd.value.isEmpty) return;
-                      final employee = _findByName(techs, hd.value); // <-- הערך העדכני
+                      final employee = _findByName(hdEmps, hd.value); // <-- הערך העדכני
                       sendWhatsApp(employee);
                     },
                   ),
@@ -126,7 +136,7 @@ Widget buildShiftCard(
                     ),
                     onPressed: () {
                       if (hd.value.isEmpty) return;
-                      final employee = _findByName(techs, hd.value); // <-- הערך העדכני
+                      final employee = _findByName(hdEmps, hd.value); // <-- הערך העדכני
                       makeCall(employee);
                     },
                   ),
@@ -134,16 +144,14 @@ Widget buildShiftCard(
               ),
             ],
           ),
-
-          const SizedBox(height: 16),
-
+          const SizedBox(height: 9),
           // IT Row
           Row(
             children: [
               Expanded(
                 child: buildDropdown(
                   it,
-                  managers.map((e) => e.name).toList(),
+                  itEmps.map((e) => e.name).toList(),
                   (v) { it.value = v; onChangedIt(v); },
                   label: "מנהל רשת" // <-- מעדכן Rx וגם קורא לקולבק''
                 ),
@@ -161,7 +169,7 @@ Widget buildShiftCard(
                     ),
                     onPressed: () {
                       if (it.value.isEmpty) return;
-                      final employee = _findByName(managers, it.value); // <-- הערך העדכני
+                      final employee = _findByName(itEmps, it.value); // <-- הערך העדכני
                       sendWhatsApp(employee);
                     },
                   ),
@@ -176,7 +184,7 @@ Widget buildShiftCard(
                     ),
                     onPressed: () {
                       if (it.value.isEmpty) return;
-                      final employee = _findByName(managers, it.value); // <-- הערך העדכני
+                      final employee = _findByName(itEmps, it.value); // <-- הערך העדכני
                       makeCall(employee);
                     },
                   ),
@@ -186,6 +194,7 @@ Widget buildShiftCard(
           ),
         ],
       ),
-    ),
-  );
+    )
+    );
+  //);
 }

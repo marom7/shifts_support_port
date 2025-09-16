@@ -38,7 +38,7 @@ class _DayCapsulesState extends State<DayCapsules> {
     final now = DateTime.now();
     final daysInMonth = DateUtils.getDaysInMonth(now.year, now.month);
     final currentDay = widget.controller.selectedMonth.value.day;       //==>now.day;
-
+    //bool isSuturday = widget.controller.isSaturday.value;
     // Ensure current day is within valid range
     if (currentDay < 1 || currentDay > daysInMonth) return;
 

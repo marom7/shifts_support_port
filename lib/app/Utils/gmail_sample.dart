@@ -6,34 +6,10 @@ import 'package:enough_mail/enough_mail.dart';
 import 'package:intl/intl.dart';
 
 main() async {
-   readEmails2();
+   readEmails();
 } 
 
-Future<void> readEmails() async {
-  final client = ImapClient(isLogEnabled: true);
-  try {
-    await client.connectToServer('imap.gmail.com', 993, isSecure: true);
-    await client.login('marom7@gmail.com', '');
-    await client.selectInbox();
-    final fetchResponse = await client.fetchMessages(
-      MessageSequence.fromRange(10, 200), // מספר ההודעות
-      'BODY.PEEK[]', 
-    );
-    for (final message in fetchResponse.messages) {
-      //print('Subject: ${message.decodeSubject()}');
-      //print('From: ${message.from}');@ashdodport.co.il
-      //print('Text: ${message.decodeTextPlainPart()}');
-      if(message.decodeSubject().toString().contains("DIGI")) {
-        print('DATA: ${message.body}');
-      }
-    }
-    await client.logout();
-  } catch (e) {
-    print('Error: $e');
-  }
-}
-
-void readEmails2() async {
+void readEmails() async {
   final client = ImapClient(isLogEnabled: true);
 
   await client.connectToServer('imap.gmail.com', 993, isSecure: true);
@@ -64,6 +40,30 @@ void readEmails2() async {
       print('DATA: $text');
   }
     await client.logout();
+}
+
+Future<void> readEmails2() async {
+  final client = ImapClient(isLogEnabled: true);
+  try {
+    await client.connectToServer('imap.gmail.com', 993, isSecure: true);
+    await client.login('marom7@gmail.com', '');
+    await client.selectInbox();
+    final fetchResponse = await client.fetchMessages(
+      MessageSequence.fromRange(10, 200), // מספר ההודעות
+      'BODY.PEEK[]', 
+    );
+    for (final message in fetchResponse.messages) {
+      //print('Subject: ${message.decodeSubject()}');
+      //print('From: ${message.from}');@ashdodport.co.il
+      //print('Text: ${message.decodeTextPlainPart()}');
+      if(message.decodeSubject().toString().contains("DIGI")) {
+        print('DATA: ${message.body}');
+      }
+    }
+    await client.logout();
+  } catch (e) {
+    print('Error: $e');
+  }
 }
 
 // אופציונלי: גם HTML אם צריך
