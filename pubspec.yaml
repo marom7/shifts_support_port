@@ -8,21 +8,19 @@ environment:
 
 dependencies:
   dropdown_button2: ^2.3.8
-  excel: ^4.0.6
   firebase_auth: ^5.5.4
   firebase_core: ^3.13.1
   firebase_database: ^11.3.6
-  flutter:
-    sdk: flutter
-  flutter_localizations:
-    sdk: flutter
   get: ^4.7.2
   google_fonts: ^6.2.1
-  intl: ^0.19.0
   url_launcher: ^6.1.11
   font_awesome_flutter: ^10.0.0
-  enough_mail: ^2.1.5
-
+  enough_mail: ^2.1.6
+  excel: ^4.0.6
+  intl: ^0.19.0
+  flutter_gen: ^5.10.0
+sdk: flutter
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -34,18 +34,24 @@ class ShiftPage extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      buildShiftCard('משמרת בוקר', shift.hd1.obs, shift.it1.obs, (v) {
-                        shift.hd1 = v; // טכנאי בוקר
-                        //controller.updateShift(dateKey, shift);
-                      }, (v) {
-                        shift.it1 = v; // מנהל רשת בוקר
-                      }),
-                      const SizedBox(height: 16),
-                      buildShiftCard('משמרת ערב', shift.hd2.obs, shift.it2.obs, (v) {
-                        shift.hd2 = v; // טכנאי ערב
-                      }, (v) {
-                        shift.it2 = v; // מנהל רשת ערב
-                      }),
+                        buildShiftCard('משמרת בוקר', shift.hd1.obs, shift.it1.obs, (v) {
+                          shift.hd1 = v; // טכנאי בוקר
+                        }, (v) {
+                          shift.it1 = v; // מנהל רשת בוקר
+                        }),
+                        const SizedBox(height: 16),
+                        buildShiftCard('משמרת ערב', shift.hd2.obs, shift.it2.obs, (v) {
+                          shift.hd2 = v; // טכנאי ערב
+                        }, (v) {
+                          shift.it2 = v; // מנהל רשת ערב
+                        }),
+                        const SizedBox(height: 16),
+                        // ↓↓↓ חדש: לילה
+                        buildShiftCard('כוננות לילה', shift.hd3.obs, shift.it3.obs, (v) {
+                          shift.hd3 = v; // טכנאי לילה
+                        }, (v) {
+                          shift.it3 = v; // מנהל רשת לילה
+                        }),
                     ],
                     ),
                   );
@@ -77,3 +83,4 @@ class ShiftPage extends StatelessWidget {
   }
 
 }
+//controller.updateShift(dateKey, shift);

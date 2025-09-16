@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, depend_on_referenced_packages
 
 /*
  * דוגמת מסך Flutter המציגה טבלת משתמשים והרשאות בשפה העברית.
@@ -15,7 +15,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+//import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const HebrewUserTableApp());
@@ -31,12 +31,12 @@ class HebrewUserTableApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "טבלת הרשאות משתמשים",
       locale: const Locale('he'),
-      supportedLocales: const [Locale('he')],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+      localizationsDelegates: const[
+        DefaultMaterialLocalizations.delegate,
+        //GlobalWidgetsLocalizations.delegate,
+        //GlobalCupertinoLocalizations.delegate,
       ],
+      
       // מגדיר את הכיוון הכללי של הטקסטים והאלמנטים לעברית (מימין לשמאל)
       builder: (BuildContext context, Widget? child) {
         return Directionality(

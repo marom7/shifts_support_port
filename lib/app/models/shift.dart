@@ -1,38 +1,42 @@
-class Shift {
-  String hd1;
-  String hd2;
-  String it1;
-  String it2;
-  String? holiday;
-  String? dateKey;
+class DayShift {
+  String hd1; // טכנאי בוקר
+  String it1; // מנהל רשת בוקר
+  String hd2; // טכנאי ערב
+  String it2; // מנהל רשת ערב
+  String hd3; // טכנאי לילה  ← חדש
+  String it3; // מנהל רשת לילה ← חדש
+  String? holiday; //  ← חג
+  String? dateKey; // ← מפתח התאריך (פורמט dd-MM-yy)
 
-  Shift({
-    required this.hd1,
-    required this.hd2,
-    required this.it1,
-    required this.it2,
+  DayShift({
+    this.hd1 = '',
+    this.it1 = '',
+    this.hd2 = '',
+    this.it2 = '',
+    this.hd3 = '', // חדש
+    this.it3 = '', // חדש
     this.holiday,
     this.dateKey,
   });
 
-  factory Shift.fromJson(Map<String, dynamic> json, {String? key}) {
-    return Shift(
-      hd1: json['hd1'] ?? '',
-      hd2: json['hd2'] ?? '',
-      it1: json['it1'] ?? '',
-      it2: json['it2'] ?? '',
-      holiday: json['holiday'] ?? '',
+  factory DayShift.fromJson(Map<String, dynamic> j,{String? key}) => DayShift(
+    hd1: (j['hd1'] ?? '').toString(),
+    it1: (j['it1'] ?? '').toString(),
+    hd2: (j['hd2'] ?? '').toString(),
+    it2: (j['it2'] ?? '').toString(),
+    hd3: (j['hd3'] ?? '').toString(), // חדש
+    it3: (j['it3'] ?? '').toString(), // חדש
+      holiday: j['holiday'] ?? '',
       dateKey: key,
-    );
-  }
+  );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'hd1': hd1,
-      'hd2': hd2,
-      'it1': it1,
-      'it2': it2,
-      'holiday': holiday ?? '',
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    'hd1': hd1,
+    'it1': it1,
+    'hd2': hd2,
+    'it2': it2,
+    'hd3': hd3, // חדש
+    'it3': it3, // חדש
+    'holiday': holiday,
+  };
 }

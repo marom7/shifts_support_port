@@ -8,8 +8,8 @@ import '../models/shift.dart';
 class ShiftsController extends GetxController {
   final DatabaseReference _dbRef = FirebaseDatabase.instance.ref('shifts');
 
-  var allShifts = <String, Shift>{};
-  var shifts = <String, Shift>{}.obs;
+  var allShifts = <String, DayShift>{};
+  var shifts = <String, DayShift>{}.obs;
 
   /// תאריך החודש הנבחר
   var selectedMonth = DateTime.now().obs;
@@ -39,18 +39,18 @@ class ShiftsController extends GetxController {
     //scrollController.dispose();
     super.onClose();
   }
-  /// שליפה מלאה מה-RTDB
+  /// RTDB-שליפה מלאה מה
   Future<void> fetchShifts() async {
     try {
       final snapshot = await _dbRef.get();
 
       if (snapshot.exists) {
         final data = Map<String, dynamic>.from(snapshot.value as Map);
-        final loaded = <String, Shift>{};
+        final loaded = <String, DayShift>{};
 
         data.forEach((key, value) {
           final shiftData = Map<String, dynamic>.from(value);
-          final model = Shift.fromJson(shiftData, key: key);
+          final model = DayShift.fromJson(shiftData, key: key);
           loaded[key] = model;
         });
 
@@ -61,24 +61,32 @@ class ShiftsController extends GetxController {
       Get.snackbar("שגיאה", "טעינת המשמרות נכשלה: $e");
     }
   }
-
+  /// עדכון משמרת
+  Future<void> updateShift(String dateKey, DayShift updatedShift) async {
+    try {
+      await _dbRef.child(dateKey).set(updatedShift.toJson());
+      allShifts[dateKey] = updatedShift..dateKey = dateKey;
+      filterShiftsByMonth(selectedMonth.value);
+    } catch (e) {
+      Get.snackbar("שגיאה", "עדכון נכשל: $e");
+    }
+  }
+  
   /// מעבר חודש אחורה
   void previousMonth() {
     selectedMonth.value = DateTime(selectedMonth.value.year, selectedMonth.value.month - 1);
     filterShiftsByMonth(selectedMonth.value);
   }
-
   /// מעבר חודש קדימה
   void nextMonth() {
     selectedMonth.value = DateTime(selectedMonth.value.year, selectedMonth.value.month + 1);
     filterShiftsByMonth(selectedMonth.value);
   }
-
   /// סינון לפי חודש נבחר
   void filterShiftsByMonth(DateTime monthDate) {
     final month = monthDate.month;
     final year = monthDate.year % 100;
-    final currentMonthShifts = <String, Shift>{};
+    final currentMonthShifts = <String, DayShift>{};
 
     allShifts.forEach((key, value) {
       try {
@@ -92,22 +100,12 @@ class ShiftsController extends GetxController {
     shifts.value = currentMonthShifts;
   }
 
-  /// עדכון משמרת
-  Future<void> updateShift(String dateKey, Shift updatedShift) async {
-    try {
-      await _dbRef.child(dateKey).set(updatedShift.toJson());
-      allShifts[dateKey] = updatedShift..dateKey = dateKey;
-      filterShiftsByMonth(selectedMonth.value);
-    } catch (e) {
-      Get.snackbar("שגיאה", "עדכון נכשל: $e");
-    }
-  }
-
-  
 }
 
 //ScrollController scrollController = ScrollController();
   //double scrollPosition = 0; 
-
+//Future<void> updateShift(String dateKey, DayShift s) async {
+//  await db.ref('shifts/$dateKey').update(s.toJson());
+//}
   //final selectedMonth = DateTime.now().obs;
   //final scrollController = ScrollController();
